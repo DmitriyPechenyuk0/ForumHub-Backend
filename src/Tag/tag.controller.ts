@@ -5,7 +5,9 @@ export const TagController: TagControllerContract = {
     getAll: async (req, res) => {
         let skip: any = req.query.skip
         let take: any = req.query.take
-        res.json(TagService.getAll(take, skip))
+        const response = await TagService.getAll(take, skip)
+        res.json(response)
+        console.log(response)
     },
     getByID: async(req, res) => {
         if (!req.params.id){

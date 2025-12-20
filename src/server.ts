@@ -3,11 +3,15 @@ import express from 'express'
 import { PostRouter } from './Post/post.routes'
 import { TagRouter } from './Tag/tag.routes'
 import { UserRouter } from './User/user.routes'
-
+import cors from 'cors';
 import { logMiddleware } from './middlewares/log.middleware'
 
 
 const app: express.Express = express()
+app.use(cors(
+{    origin: 'http://localhost:3000',
+    credentials: true}
+))
 app.use(express.json())
 app.use(logMiddleware)
 app.use(PostRouter)

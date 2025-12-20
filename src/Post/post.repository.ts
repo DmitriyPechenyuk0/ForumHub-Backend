@@ -9,10 +9,17 @@ export const PostRepo: PostRepositoryContract = {
             if (typeof take === 'number') options.take = take
             if (typeof skip === 'number') options.skip = skip
             
-            let sliced = await client.post.findMany(options)
-            
+            let sliced = await client.post.findMany({...options, include: {
+                tags: {
+                    include: {
+                        tag: true
+                    }
+                }
+            }})
+            console.log('succes repo')
             return sliced
         } catch (error) {
+            console.log(error)
             client.$disconnect()
             return undefined
         }

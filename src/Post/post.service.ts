@@ -27,6 +27,7 @@ export const PostService: PostServiceContract = {
                 return PostRepo.getAll(skip)
             }
         } else{
+            
             return PostRepo.getAll()
         }
     },

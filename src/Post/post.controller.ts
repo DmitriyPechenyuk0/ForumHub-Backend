@@ -3,10 +3,13 @@ import { PostService } from "./post.service";
 import { PostControllerContract } from "./post.types";
 
 export const PostController: PostControllerContract = {
-    getAll: (req, res) =>{
+    getAll: async (req, res) =>{
         let skip: any = req.query.skip
         let take: any = req.query.take
-        res.json(PostService.getAll(take, skip))
+        const answer = await PostService.getAll(take, skip)
+        res.json(answer)
+        console.log(answer)
+        
     },
     getByID: (req, res)=>{
         if (!req.params.id){
