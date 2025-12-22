@@ -14,12 +14,19 @@ export type CreatePostData = Omit<Post, "id">
 
 export type UpdatePostData = Partial<Post> 
 
+export type Comment = Prisma.PostCommentGetPayload<{}>
+
+export type CommentBody = {
+    body: string, userId: number 
+}
+
 export interface PostServiceContract {
     getAll: (take: number | undefined, skip: number | undefined) =>  Promise<Post[] | undefined> ;
     create: (data: CreatePostData) => Promise<Post | string>;
     getByID: (id: number) => Promise<Post | null>;
     update: (id: number, data: UpdatePostData) => Promise<Post | null>;
-    delete: (id: number) => Promise<Post| string | undefined | null >
+    delete: (id: number) => Promise<Post| string | undefined | null >;
+    createComment: (body: string, authorId: number, postId: number) => Promise<Comment | string>
 }
 
 export interface PostControllerContract {
@@ -28,6 +35,7 @@ export interface PostControllerContract {
     create: (req: Request<object, Post | string, CreatePostData, object>, res: Response<Post | string | object | null>) => Promise<void>,
     update: (req: Request<{id: string}, Post | string, UpdatePostData, object>, res: Response<Post | string | object>) => Promise<void>
     delete: (req: Request<{id: string}, Post | string, object>, res: Response<string | null | Post>) => Promise<void>
+    createComment: (req: Request<{postId: string}, Comment, CommentBody>, res: Response<Comment | string>) => Promise<void>
 }
 
 export interface PostRepositoryContract {
@@ -35,7 +43,8 @@ export interface PostRepositoryContract {
     create: (data: CreatePostData) => Promise<Post | string>;
     getByID: (id: number) => Promise<Post | null>;
     update: (id:number, data: UpdatePostData) => Promise<Post | null>;
-    delete: (id: number) => Promise<Post | string | undefined | null>
+    delete: (id: number) => Promise<Post | string | undefined | null>;
+    createComment: (body: string, authorId: number, postId: number) => Promise<Comment | string>
 }
 
 // Request<P, ResBody, ReqBody, ReqQuery, Locals>

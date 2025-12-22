@@ -87,4 +87,40 @@ export const PostController: PostControllerContract = {
             res.json('Error while trying delete post')
         }
     },
+    createComment: async (req, res) => {
+        try {
+            
+            let { body, userId } = req.body
+            let post = +req.params.postId
+            
+            if (!body){
+                res.status(422).json('body is required.')
+                return
+            }
+            
+            if (!userId){
+                res.status(422).json('userId is required.')
+                return
+            }
+            if (isNaN(+userId)){
+                res.status(422).json('userId must be integer.')
+                return
+            }
+            if (isNaN(post) || !post){
+                res.status(422).json('postId must be integer.')
+                return
+            }
+            
+            const response = await PostService.createComment(body, +userId, post)
+            if (!response) {
+                res.status(500).json("Comment creation error")
+                return
+            }
+            res.status(201).json(response)
+        } catch (error) {
+            console.log(error)
+            return
+
+        }
+    },
 }

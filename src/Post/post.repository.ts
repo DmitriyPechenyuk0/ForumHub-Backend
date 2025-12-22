@@ -85,5 +85,17 @@ export const PostRepo: PostRepositoryContract = {
             client.$disconnect()
             return null
         }
-    }
+    }, 
+    createComment: async(body, authorId, postId) => {
+        try {
+            return client.postComment.create({
+                data: {
+                    body, authorId, postId
+                }
+            })
+        } catch (error) {
+            console.log(error)
+            return "Comment creation error"
+        }
+    },
 }

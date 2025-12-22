@@ -53,4 +53,12 @@ export const PostService: PostServiceContract = {
     async delete(id) {
         return PostRepo.delete(id)
     },
+    createComment: async(body, authorId, postId) => {
+        try {
+            return PostRepo.createComment(body, authorId, postId)
+        } catch (error) {
+            console.log(error)
+            return "Comment creation error"
+        }
+    },
 }
