@@ -29,8 +29,13 @@ export const PostService: PostServiceContract = {
 			return PostRepo.getAll();
 		}
 	},
-	getByID(id) {
-		return PostRepo.getByID(id);
+	getByID(id, includeComments, includeLikedBy) {
+		try {
+			return PostRepo.getByID(id, includeComments, includeLikedBy);
+		} catch (error) {
+			console.log(error);
+			throw new Error("error");
+		}
 	},
 	async update(id, data) {
 		let updateData: UpdatePostData = {};

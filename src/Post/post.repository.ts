@@ -27,9 +27,15 @@ export const PostRepo: PostRepositoryContract = {
 			return undefined;
 		}
 	},
-	async getByID(id) {
+	async getByID(id, includeComments, includeLikedBy) {
 		try {
-			const post = client.post.findUniqueOrThrow({ where: { id: id } });
+			const post = client.post.findUniqueOrThrow({
+				where: { id: id },
+				include: {
+					comments: includeComments || false,
+					likedBy: includeLikedBy || false,
+				},
+			});
 			return post;
 		} catch (error) {
 			client.$disconnect();

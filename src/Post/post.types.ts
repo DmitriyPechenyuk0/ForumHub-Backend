@@ -27,7 +27,11 @@ export interface PostServiceContract {
 		skip: number | undefined,
 	) => Promise<Post[] | undefined>;
 	create: (data: CreatePostData) => Promise<Post | string>;
-	getByID: (id: number) => Promise<Post | null>;
+	getByID: (
+		id: number,
+		includeComments?: boolean,
+		includeLikedBy?: boolean,
+	) => Promise<Post | null>;
 	update: (id: number, data: UpdatePostData) => Promise<Post | null>;
 	delete: (id: number) => Promise<Post | string | undefined | null>;
 	createComment: (
@@ -50,9 +54,14 @@ export interface PostControllerContract {
 		res: Response<Post[] | string | object>,
 	) => void;
 	getByID: (
-		req: Request<{ id: string }, Post | string, object>,
+		req: Request<
+			{ id: string },
+			Post | string,
+			object,
+			{ include?: string | string[] }
+		>,
 		res: Response<Post | string | object | null>,
-	) => void;
+	) => Promise<void>;
 	create: (
 		req: Request<object, Post | string, CreatePostData, object>,
 		res: Response<Post | string | object | null>,
@@ -85,7 +94,11 @@ export interface PostRepositoryContract {
 		skip?: number | undefined,
 	) => Promise<Post[] | undefined>;
 	create: (data: CreatePostData) => Promise<Post | string>;
-	getByID: (id: number) => Promise<Post | null>;
+	getByID: (
+		id: number,
+		includeComments?: boolean,
+		includeLikedBy?: boolean,
+	) => Promise<Post | null>;
 	update: (id: number, data: UpdatePostData) => Promise<Post | null>;
 	delete: (id: number) => Promise<Post | string | undefined | null>;
 	createComment: (

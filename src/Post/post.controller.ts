@@ -10,19 +10,37 @@ export const PostController: PostControllerContract = {
 		res.json(answer);
 		console.log(answer);
 	},
-	getByID: (req, res) => {
+	getByID: async (req, res) => {
+		const { include } = req.query;
+
+		let includeArray: string[] = [];
+
+		if (include) {
+			if (Array.isArray(include)) {
+				includeArray = include;
+			} else {
+				includeArray = [include];
+			}
+		}
+
+		const includeComments = includeArray.includes("comments");
+		const includeLikedBy = includeArray.includes("likedBy");
+
 		if (!req.params.id) {
 			res.status(400).json("id is required");
 			return;
 		}
 		const id = +req.params.id;
+
 		console.log(id);
 		if (isNaN(id)) {
 			res.status(400).json("id must be an integer");
 			return;
 		}
 
-		res.json(PostService.getByID(id));
+		res.json(
+			await PostService.getByID(id, includeComments, includeLikedBy),
+		);
 	},
 	create: async (req, res) => {
 		let body = req.body;
