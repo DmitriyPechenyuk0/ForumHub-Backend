@@ -2,36 +2,42 @@ import { Request, Response, NextFunction } from "express";
 import { verify, TokenExpiredError } from "jsonwebtoken";
 import { env } from "../config/env";
 
-export function authMiddleware(req:Request, res: Response, next: NextFunction){
-    try {
-        const authHeader = req.headers.authorization;
-        
-        if (!authHeader) {
-            res.status(401).json('No token')
-            return
-        }
-        const [type, token]= authHeader.split(' ')
+export function authMiddleware(
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) {
+	try {
+		const authHeader = req.headers.authorization;
 
-        if (type != "Bearer" || !token) {
-            res.status(401).json({message: "wrong format autharization"})
-            return
-        }
+		if (!authHeader) {
+			res.status(401).json("No token");
+			return;
+		}
+		const [type, token] = authHeader.split(" ");
 
-        const payload = verify(token, env.SECRET_KEY)
+		if (type != "Bearer" || !token) {
+			res.status(401).json({ message: "wrong format autharization" });
+			return;
+		}
 
-        if (typeof payload == "string") {
-            res.status(401).json({message: "Token wrong format"})
-            return
-        }
+		const payload = verify(token, env.SECRET_KEY);
 
-        res.locals.userId = payload.id
+		if (typeof payload == "string") {
+			res.status(401).json({ message: "Token wrong format" });
+			return;
+		}
 
-        next()
-    } catch (error) {
-        if (error instanceof TokenExpiredError) {
-            res.status(401).json({message: "You need to reload your token. It expired"})
-            return
-        }
-        res.status(500).json({message: "Server error"})
-    }
+		res.locals.userId = payload.id;
+
+		next();
+	} catch (error) {
+		if (error instanceof TokenExpiredError) {
+			res.status(401).json({
+				message: "You need to reload your token. It expired",
+			});
+			return;
+		}
+		res.status(500).json({ message: "Server error" });
+	}
 }

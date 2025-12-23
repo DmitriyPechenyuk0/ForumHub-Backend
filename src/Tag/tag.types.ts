@@ -4,20 +4,35 @@ import { Prisma } from "../generated/prisma";
 export type Tag = Prisma.TagGetPayload<{}>;
 
 export interface TagServiceContract {
-    getAll: (take: number | undefined, skip: number | undefined) =>  Promise<Tag[] | undefined> ;
-    getByID: (id: number) => Promise<Tag | null>;
-
+	getAll: (
+		take: number | undefined,
+		skip: number | undefined,
+	) => Promise<Tag[] | undefined>;
+	getByID: (id: number) => Promise<Tag | null>;
 }
 
 export interface TagControllerContract {
-    getAll: (req: Request<object, Tag[] | string, object, {take?:number, skip?:number}>, res: Response<Tag[] | string | object>) => void,
-    getByID: (req: Request<{id: string}, Tag | string, object>, res: Response<Tag | string | object | null>) => void,
-
+	getAll: (
+		req: Request<
+			object,
+			Tag[] | string,
+			object,
+			{ take?: number; skip?: number }
+		>,
+		res: Response<Tag[] | string | object>,
+	) => void;
+	getByID: (
+		req: Request<{ id: string }, Tag | string, object>,
+		res: Response<Tag | string | object | null>,
+	) => void;
 }
 
 export interface TagRepositoryContract {
-    getAll: (take?: number | undefined, skip?: number | undefined) => Promise<Tag[] | undefined>;
-    getByID: (id: number) => Promise<Tag | null>;
+	getAll: (
+		take?: number | undefined,
+		skip?: number | undefined,
+	) => Promise<Tag[] | undefined>;
+	getByID: (id: number) => Promise<Tag | null>;
 }
 
 // Request<P, ResBody, ReqBody, ReqQuery, Locals>
