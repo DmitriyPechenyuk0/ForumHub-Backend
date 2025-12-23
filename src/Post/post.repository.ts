@@ -76,7 +76,7 @@ export const PostRepo: PostRepositoryContract = {
     },
     async delete(id) {
         try {
-            client.post.delete({
+            await client.post.delete({
                 where: {
                     id: id
                 }
@@ -88,14 +88,47 @@ export const PostRepo: PostRepositoryContract = {
     }, 
     createComment: async(body, authorId, postId) => {
         try {
-            return client.postComment.create({
+            return await client.postComment.create({
                 data: {
                     body, authorId, postId
                 }
             })
         } catch (error) {
+            client.$disconnect()
             console.log(error)
             return "Comment creation error"
+        }
+    },
+    addLike: async(userId, postId) => {
+        try {
+            await client.postLike.create({
+                data: {
+                    userId, postId
+                }
+            })
+            return 'Like was successfully stamped'
+        } catch (error) {
+            client.$disconnect()
+            console.log(error)
+            return 'Server Error'
+        }
+    },
+    removeLike: async(userId, postId) => {
+        try {
+            let like = await client.postLike.delete({
+                where: {
+                    userId_postId : {
+                        userId, 
+                        postId
+                    }
+                }
+            })
+            console.log(like)
+            return 'Like was successfully removed'
+        } catch (error) {
+            client.$disconnect()
+            console.log(error)
+            return 'Server Error'
         }
     },
 }

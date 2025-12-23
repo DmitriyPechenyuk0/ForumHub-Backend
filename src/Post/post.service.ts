@@ -61,4 +61,20 @@ export const PostService: PostServiceContract = {
             return "Comment creation error"
         }
     },
+    addLike: async(userId, postId) => {
+        try {
+            return await PostRepo.addLike(userId, postId)
+        } catch (error) {
+            console.log(error)
+            return 'Server error'
+        }
+    },
+    removeLike: async(userId, postId) => {
+        try {
+            return await PostRepo.removeLike(userId, postId)
+        } catch (error) {
+            console.log(error)
+            return 'Server error'
+        }
+    },
 }

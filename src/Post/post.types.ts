@@ -27,15 +27,19 @@ export interface PostServiceContract {
     update: (id: number, data: UpdatePostData) => Promise<Post | null>;
     delete: (id: number) => Promise<Post| string | undefined | null >;
     createComment: (body: string, authorId: number, postId: number) => Promise<Comment | string>
+    addLike: (userId: number, postId: number) => Promise<string>
+    removeLike: (userId: number, postId: number) => Promise<string>
 }
 
 export interface PostControllerContract {
     getAll: (req: Request<object, Post[] | string, object, {take?:number, skip?:number}>, res: Response<Post[] | string | object>) => void,
     getByID: (req: Request<{id: string}, Post | string, object>, res: Response<Post | string | object | null>) => void,
     create: (req: Request<object, Post | string, CreatePostData, object>, res: Response<Post | string | object | null>) => Promise<void>,
-    update: (req: Request<{id: string}, Post | string, UpdatePostData, object>, res: Response<Post | string | object>) => Promise<void>
-    delete: (req: Request<{id: string}, Post | string, object>, res: Response<string | null | Post>) => Promise<void>
-    createComment: (req: Request<{postId: string}, Comment, CommentBody>, res: Response<Comment | string>) => Promise<void>
+    update: (req: Request<{id: string}, Post | string, UpdatePostData, object>, res: Response<Post | string | object>) => Promise<void>,
+    delete: (req: Request<{id: string}, Post | string, object>, res: Response<string | null | Post>) => Promise<void>,
+    createComment: (req: Request<{postId: string}, Comment, CommentBody>, res: Response<Comment | string>) => Promise<void>,
+    addLike: (req: Request<{postId: string, userId: string}, string>, res: Response<string>) => Promise<void>
+    removeLike: (req: Request<{postId: string, userId: string}, string>, res: Response<string>) => Promise<void>
 }
 
 export interface PostRepositoryContract {
@@ -45,6 +49,8 @@ export interface PostRepositoryContract {
     update: (id:number, data: UpdatePostData) => Promise<Post | null>;
     delete: (id: number) => Promise<Post | string | undefined | null>;
     createComment: (body: string, authorId: number, postId: number) => Promise<Comment | string>
+    addLike: (userId: number, postId: number) => Promise<string>
+    removeLike: (userId: number, postId: number) => Promise<string>
 }
 
 // Request<P, ResBody, ReqBody, ReqQuery, Locals>

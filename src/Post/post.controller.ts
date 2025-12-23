@@ -123,4 +123,47 @@ export const PostController: PostControllerContract = {
 
         }
     },
+    addLike: async (req, res) => {
+        try {
+            let { postId, userId } = req.params
+            let IsNannedPostId = +postId
+            let IsNannedUserId = +userId
+
+            if (isNaN(IsNannedUserId) || !IsNannedUserId){
+                res.status(422).json('userId must be integer.')
+                return
+            }
+            if (isNaN(IsNannedPostId) || !IsNannedPostId){
+                res.status(422).json('postId must be integer.')
+                return
+            }
+            const response = await PostService.addLike(IsNannedUserId, IsNannedPostId)
+            res.status(200).json('success')
+        } catch (error) {
+            console.log(error)
+            
+            return
+        }
+    },
+    removeLike: async (req, res) => {
+        try {
+            let { postId, userId } = req.params
+            let IsNannedPostId = +postId
+            let IsNannedUserId = +userId
+
+            if (isNaN(IsNannedUserId) || !IsNannedUserId){
+                res.status(422).json('userId must be integer.')
+                return
+            }
+            if (isNaN(IsNannedPostId) || !IsNannedPostId){
+                res.status(422).json('postId must be integer.')
+                return
+            }
+            const response = await PostService.removeLike(IsNannedUserId, IsNannedPostId)
+            res.status(200).json('success')
+        } catch (error) {
+            console.log(error)
+            return
+        }
+    },
 }
